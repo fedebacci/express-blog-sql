@@ -145,7 +145,7 @@ const show = (req, res) => {
         
         // post.image = `http://localhost:3000/imgs/posts/${post.image.replace('avif', 'jpeg')}`;
         post.image = `${APP_HOST}:${APP_PORT}/imgs/posts/${post.image.replace('avif', 'jpeg')}`;
-        console.log("", post.image);
+        // console.log("post.image", post.image);
 
 
         const tagsSql = `

@@ -1,8 +1,6 @@
 import PostCard from "./PostCard";
-import { usePosts } from "../../contexts/PostsContext";
 
-export default function PostsList () {
-    const { posts } = usePosts();
+export default function PostsList ({ posts }) {
     return (
         <div className="col-12">
             <div className="row row-cols-2 g-3">

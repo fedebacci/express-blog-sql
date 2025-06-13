@@ -28,7 +28,6 @@ import NotFoundPage from './pages/NotFoundPage';
 
 // # IMPORT CONTESTI GLOBALI
 import { AlertProvider } from './contexts/AlertContext';
-import { PostsProvider } from './contexts/PostsContext';
 
 
 
@@ -42,29 +41,25 @@ export default function App() {
 
       <AlertProvider>
 
-        <PostsProvider>
+        <BrowserRouter>
+          <Routes>
+            
+            <Route element={<DefaultLayout />}>
+              <Route index element={<HomePage />} />
+              <Route path={pages.ABOUT()} element={<AboutPage />} />
 
-          <BrowserRouter>
-            <Routes>
-              
-              <Route element={<DefaultLayout />}>
-                <Route index element={<HomePage />} />
-                <Route path={pages.ABOUT()} element={<AboutPage />} />
-
-                <Route path={pages.POSTS()}>
-                  <Route index element={<PostsPage />} />
-                  <Route path={pages.CREATEPOST()} element={<CreatePostPage />} />
-                  <Route path={pages.SHOWPOST(":id")} element={<ShowPostPage />} />
-                  <Route path={pages.MODIFYPOST(":id")} element={<ModifyPostPage />} />
-                </Route>
-
-                <Route path='*' element={<NotFoundPage />} />
+              <Route path={pages.POSTS()}>
+                <Route index element={<PostsPage />} />
+                <Route path={pages.CREATEPOST()} element={<CreatePostPage />} />
+                <Route path={pages.SHOWPOST(":id")} element={<ShowPostPage />} />
+                <Route path={pages.MODIFYPOST(":id")} element={<ModifyPostPage />} />
               </Route>
 
-            </Routes>
-          </BrowserRouter>
-          
-        </PostsProvider>
+              <Route path='*' element={<NotFoundPage />} />
+            </Route>
+
+          </Routes>
+        </BrowserRouter>
 
       </AlertProvider>
 

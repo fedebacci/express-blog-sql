@@ -8,17 +8,15 @@ export default function HomePage () {
 
 
 
-    // useEffect(() => {
-    //     showAlert("Hai aperto la home", "success");
-    //     // ! ATTENZIONE
-    //     // ? SENZA IL RETURN QUA SOTTO L'ALERT RIMANE ANCHE AL CAMBIO PAGINA
-    //     return () => {
-    //         hideAlert();
-    //     };
-    // }, []);
+    useEffect(() => {
+        showAlert("Hai aperto la home", "success");
 
-
-    const appName = import.meta.env.VITE_APP_NAME;
+        // ! ATTENZIONE
+        // ? SENZA IL RETURN QUA SOTTO L'ALERT RIMANE ANCHE AL CAMBIO PAGINA
+        return () => {
+            hideAlert();
+        };
+    }, []);
 
 
     return (
@@ -27,8 +25,7 @@ export default function HomePage () {
                 <div className="row">
                     <div className="col-12">
                         <h2 className="text-center">
-                            {/* Homepage */}
-                            {appName}
+                            Homepage
                         </h2>
                     </div>
                 </div>

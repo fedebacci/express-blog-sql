@@ -1,10 +1,64 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import pages from "../../assets/js/data/pages";
+
+
+const apiUrl = 'http://localhost:3000/posts';
 
 
 
-import { useAlert } from "../../contexts/AlertContext";
-import { usePosts } from "../../contexts/PostsContext";
+// # IMMEDIATO!
+// todo: SOSTITUIRE CON DATI PROVENIENTI DA DB
+
+const postInitialData = {
+    title: "",
+    image: "",
+    content: "",
+    tags: [],
+};
+const possibleTags = [
+    {
+        id: 1, 
+        text: "Antipasti"
+    },
+    {
+        id: 2, 
+        text: "Primi piatti"
+    },
+    {
+        id: 3, 
+        text: "Dolci veloci"
+    },
+    {
+        id: 4, 
+        text: "Ricette veloci"
+    },
+    {
+        id: 5, 
+        text: "Dolci"
+    },
+    {
+        id: 6, 
+        text: "Dolci al cioccolato"
+    },
+    {
+        id: 7, 
+        text: "Ricette vegetariane"
+    },
+    {
+        id: 8, 
+        text: "Torte"
+    },
+    {
+        id: 9, 
+        text: "Ricette al forno"
+    },
+];
+
+
+
 
 
 
@@ -12,20 +66,8 @@ import { usePosts } from "../../contexts/PostsContext";
 
 export default function CreatePostPage () {
 
-    const { hideAlert } = useAlert();
-    const { newPostInitialData, possibleTags, createPost } = usePosts();
-
-    const [ newPostData, setNewPostData ] =  useState({ ...newPostInitialData });
+    const [postData, setPostData] =  useState({ ...postInitialData });
     const navigate = useNavigate();
-
-
-
-    useEffect(() => {
-        return () => {
-            hideAlert();
-        }
-    }, [])
-
 
 
 
@@ -36,16 +78,16 @@ export default function CreatePostPage () {
             const value = e.target.value;
 
             if (isChecked) {
-                const newTags = [ ...newPostData.tags, value ];                
-                setNewPostData({ ...newPostData, tags: newTags});
+                const newTags = [ ...postData.tags, value ];                
+                setPostData({ ...postData, tags: newTags});
             } else {
-                const newTags = [ ...newPostData.tags ].filter(tag => tag != value);
-                setNewPostData({ ...newPostData, tags: newTags});
+                const newTags = [ ...postData.tags ].filter(tag => tag != value);
+                setPostData({ ...postData, tags: newTags});
             };
 
             return;
         };
-        setNewPostData({ ...newPostData, [e.target.name]: e.target.value});
+        setPostData({ ...postData, [e.target.name]: e.target.value});
     };
 
 
@@ -53,8 +95,16 @@ export default function CreatePostPage () {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        createPost(newPostData, navigate);
-        setNewPostData({ ...newPostInitialData });
+        axios
+            .post(apiUrl, postData)
+            .then(response => {
+                console.info("response", response);
+                setPostData({ ...postInitialData });
+                navigate(pages.SHOWPOST(response.data.newPost.id));
+            })
+            .catch(error => {
+                console.error(error);
+            });
     };
 
 
@@ -80,7 +130,7 @@ export default function CreatePostPage () {
                                     * Post title
                                 </label>
                                 <input 
-                                    value={newPostData.title}
+                                    value={postData.title}
                                     onChange={handleInputChange}
                                     name="title"
                                     required
@@ -96,7 +146,7 @@ export default function CreatePostPage () {
                                     * Post image URL
                                 </label>
                                 <input 
-                                    value={newPostData.image}
+                                    value={postData.image}
                                     onChange={handleInputChange}
                                     name="image"
                                     required
@@ -112,7 +162,7 @@ export default function CreatePostPage () {
                                     * Post content
                                 </label>
                                 <textarea 
-                                    value={newPostData.content}
+                                    value={postData.content}
                                     onChange={handleInputChange}
                                     name="content"
                                     required
@@ -134,7 +184,7 @@ export default function CreatePostPage () {
                                             <div className="form-check" key={tag.id}>
                                                 <input 
                                                     onChange={handleInputChange}
-                                                    checked={newPostData.tags.includes(tag.text)}
+                                                    checked={postData.tags.includes(tag.text)}
                                                     value={tag.text} 
 
                                                     id={`check-${tag.text}`} 

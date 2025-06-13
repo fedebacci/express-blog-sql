@@ -1,15 +1,9 @@
-
-import { usePosts } from "../../contexts/PostsContext";
-
-
 import PostTableRowElement from "./PostTableRowElement";
 
-export default function PostsTable () {
-
-    const { posts, deletePost } = usePosts();
-
+export default function PostsTable ({ posts, handleDelete }) {
+    // console.debug("posts", posts);
     return (
-        posts.length > 0 ?
+        posts?.length > 0 ?
         <table className="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -19,23 +13,19 @@ export default function PostsTable () {
                     <th>
                         TITLE
                     </th>
-                    {/* <th>
-                        TAGS
-                    </th> */}
                     <th>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {
-                    posts.map(post => {
+                    posts?.map(post => {
                         return (
                             <PostTableRowElement 
-                                id={post.id}
                                 key={post.id}
+                                id={post.id}
                                 title={post.title}
-                                tags={post.tags}
-                                handleDelete={deletePost}
+                                handleDelete={handleDelete}
                             />
                         )
                     })

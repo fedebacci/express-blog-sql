@@ -11,13 +11,8 @@ export default function PostCard ({ post }) {
     return (
         <div className="col">
             <div className="card shadow h-100" data-id={post.id}>
-                <div className="card-header text-center p-0 overflow-hidden">
-                    <img 
-                        src={post.image} 
-                        alt={post.title} 
-
-                        className="post-image"
-                    />
+                <div className="card-header p-0 overflow-hidden">
+                    <img src={post.image} alt={post.title} />
                 </div>
                 <div className="card-body">
                     <h6>
@@ -28,9 +23,9 @@ export default function PostCard ({ post }) {
                     <p>
                         {post.content}
                     </p>
-                    {/* <Link to={pages.MODIFYPOST(post.id)}>
+                    <Link to={pages.MODIFYPOST(post.id)}>
                         Modifica post
-                    </Link> */}
+                    </Link>
                 </div>
             </div>
         </div>

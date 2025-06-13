@@ -7,7 +7,10 @@ import pages from "../../assets/js/data/pages";
 
 
 
-export default function PostTableRowElement ({ id, title, tags, handleDelete }) {
+export default function PostTableRowElement ({ id, title, handleDelete }) {
+
+
+
     return (
         <tr key={id}>
             <td>
@@ -18,17 +21,6 @@ export default function PostTableRowElement ({ id, title, tags, handleDelete }) 
                     {title}
                 </Link>
             </td>
-            {/* <td>
-                {
-                    tags.map((tag) => {
-                        return (
-                            <span className="badge text-bg-primary me-1">
-                                {tag} 
-                            </span>
-                        )
-                    })
-                }
-            </td> */}
             <td>
                 <Link className="btn btn-primary me-1" to={pages.MODIFYPOST(id)}>
                     Modifica
