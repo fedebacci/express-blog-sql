@@ -1,6 +1,7 @@
 import PostTableRowElement from "./PostTableRowElement";
 
 export default function PostsTable ({ posts, handleDelete }) {
+    // console.debug("posts", posts);
     return (
         posts.length > 0 ?
         <table className="table table-bordered table-striped">
@@ -17,17 +18,18 @@ export default function PostsTable ({ posts, handleDelete }) {
                 </tr>
             </thead>
             <tbody>
-                {
+                {/* {
                     posts.map(post => {
                         return (
                             <PostTableRowElement 
+                                key={post.id}
                                 id={post.id}
                                 title={post.title}
                                 handleDelete={handleDelete}
                             />
                         )
                     })
-                }
+                } */}
             </tbody>
         </table>
         :

@@ -23,9 +23,9 @@ const express = require('express');
 // * INIZIALIZZO L'APPLICAZIONE EXPRESS INVOCANDO LA FUNZIONE express()
 const app = express();
 const { APP_PORT, APP_HOST, FRONTEND_APP_URL } = process.env;
-console.debug(`APP_PORT: ${APP_PORT}`);
-console.debug(`APP_HOST: ${APP_HOST}`);
-console.debug(`FRONTEND_APP_URL=: ${FRONTEND_APP_URL}`);
+// console.debug(`APP_PORT: ${APP_PORT}`);
+// console.debug(`APP_HOST: ${APP_HOST}`);
+// console.debug(`FRONTEND_APP_URL=: ${FRONTEND_APP_URL}`);
 
 
 

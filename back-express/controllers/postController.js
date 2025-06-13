@@ -11,61 +11,74 @@
 
 // # IMMEDIATO!
 // todo: sostituire con riferimento a db come visto a lezione
-let { posts } = require('../data/db');
+// let { posts } = require('../data/db');
+
+const connection = require("../data/db")
 
 
 
 
 
 const index = (req, res) => {
-    // console.log('index')
+    console.log('index')
     
-    let { title, content, tags, filterAll } = req.query
-    if (tags) tags = tags.split(', ');
-    filterAll = filterAll === "false" ? false : true;
+    // let { title, content, tags, filterAll } = req.query
+    // if (tags) tags = tags.split(', ');
+    // filterAll = filterAll === "false" ? false : true;
 
+    // let filteredPosts = [...posts];
 
-
-    let filteredPosts = [...posts];
-
-    if (filterAll === false) {
-        filteredPosts = [];
-        posts.forEach(post => {
-            let containsTags = false;
-            tags?.forEach(tag => {
-                if (post.tags.includes(tag)) containsTags = true;
-            });
+    // if (filterAll === false) {
+    //     filteredPosts = [];
+    //     posts.forEach(post => {
+    //         let containsTags = false;
+    //         tags?.forEach(tag => {
+    //             if (post.tags.includes(tag)) containsTags = true;
+    //         });
             
-            if (post.title?.includes(title) || post.content?.includes(content) || containsTags === true) {
-                filteredPosts.push(post);
-            };
-        })
-    } else {
-        if (title) {
-            filteredPosts = filteredPosts.filter(post => post.title.includes(title));
-        };
+    //         if (post.title?.includes(title) || post.content?.includes(content) || containsTags === true) {
+    //             filteredPosts.push(post);
+    //         };
+    //     })
+    // } else {
+    //     if (title) {
+    //         filteredPosts = filteredPosts.filter(post => post.title.includes(title));
+    //     };
     
-        if (content) {
-            filteredPosts = filteredPosts.filter(post => post.content.includes(content));
-        };
+    //     if (content) {
+    //         filteredPosts = filteredPosts.filter(post => post.content.includes(content));
+    //     };
         
-        if (tags) {
-            tags.forEach(tag => {
-                filteredPosts = filteredPosts.filter(post => post.tags.includes(tag));
-            });
-        };
-    };
+    //     if (tags) {
+    //         tags.forEach(tag => {
+    //             filteredPosts = filteredPosts.filter(post => post.tags.includes(tag));
+    //         });
+    //     };
+    // };
 
-    if (filteredPosts.length === 0) {
-        const error = new Error(`I filtri utilizzati escludono tutti i post. Prova a modificare i filtri e riprova.`);
-        error.statusCode = 404;
-        throw error;
-    };
+    // if (filteredPosts.length === 0) {
+    //     const error = new Error(`I filtri utilizzati escludono tutti i post. Prova a modificare i filtri e riprova.`);
+    //     error.statusCode = 404;
+    //     throw error;
+    // };
 
+    // res
+    //     .json({   
+    //         description: "Lista dei post",
+    //         posts: filteredPosts
+
+
+
+
+
+
+
+
+    // # TMP PER NON ANDARE IN ERRORE DURANTE SPOSTAMENTO RICEZIONE DATI
     res
         .json({   
             description: "Lista dei post",
-            posts: filteredPosts
+            posts: []
         });
 };
 
@@ -73,31 +86,35 @@ const index = (req, res) => {
 
 const show = (req, res) => {
     const id = parseInt(req.params.id);
-    const post = posts.find(post => post.id === id);
-    // console.log('show', post)
-
+    // console.log(`show: ${id}`);
     
+    
+
+
+    const post = posts.find(post => post.id === id);
+    console.log('show', post)
+
     if (!post) {
         const error = new Error(`Visualizzazione dettagli del post ${id} fallita: Post non trovato`);
         error.statusCode = 404;
         throw error;
     };
 
-
-    // const prevPost = posts[posts.indexOf(post) - 1];
-    // const nextPost = posts[posts.indexOf(post) + 1];
     const prevPost = posts[posts.indexOf(post) - 1]?.id;
     const nextPost = posts[posts.indexOf(post) + 1]?.id;
-
 
     res
         .json({
             description: `Visualizzazione dettagli del post ${id}`,
-            // posts,
+            posts,
             post,
             prevPost,
             nextPost,
         });
+
+
+
+
 };
 
 

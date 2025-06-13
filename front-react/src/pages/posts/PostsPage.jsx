@@ -30,7 +30,7 @@ export default function PostsPage () {
         axios
             .get(apiUrl)
             .then(response => {
-                // console.info(response.data);
+                console.info(response.data);
                 setPosts(response.data.posts);
             })
             .catch(error => {

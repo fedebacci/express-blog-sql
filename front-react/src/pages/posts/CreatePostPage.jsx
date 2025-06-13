@@ -9,6 +9,8 @@ const apiUrl = 'http://localhost:3000/posts';
 
 
 
+// # IMMEDIATO!
+// todo: SOSTITUIRE CON DATI PROVENIENTI DA DB
 
 const postInitialData = {
     title: "",
@@ -96,6 +98,7 @@ export default function CreatePostPage () {
         axios
             .post(apiUrl, postData)
             .then(response => {
+                console.info("response", response);
                 setPostData({ ...postInitialData });
                 navigate(pages.SHOWPOST(response.data.newPost.id));
             })
