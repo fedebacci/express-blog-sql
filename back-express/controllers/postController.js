@@ -90,32 +90,86 @@ const index = (req, res) => {
 
 
 const show = (req, res) => {
-    const id = parseInt(req.params.id);
-    // console.log(`show: ${id}`);
     
     
+    // const id = parseInt(req.params.id);
+    // // console.log(`show: ${id}`);
 
 
-    const post = posts.find(post => post.id === id);
-    console.log('show', post)
+    // const post = posts.find(post => post.id === id);
+    // console.log('show', post)
 
-    if (!post) {
-        const error = new Error(`Visualizzazione dettagli del post ${id} fallita: Post non trovato`);
-        error.statusCode = 404;
-        throw error;
-    };
+    // if (!post) {
+    //     const error = new Error(`Visualizzazione dettagli del post ${id} fallita: Post non trovato`);
+    //     error.statusCode = 404;
+    //     throw error;
+    // };
 
-    const prevPost = posts[posts.indexOf(post) - 1]?.id;
-    const nextPost = posts[posts.indexOf(post) + 1]?.id;
+    // const prevPost = posts[posts.indexOf(post) - 1]?.id;
+    // const nextPost = posts[posts.indexOf(post) + 1]?.id;
 
-    res
-        .json({
-            description: `Visualizzazione dettagli del post ${id}`,
-            posts,
-            post,
-            prevPost,
-            nextPost,
+    // res
+    //     .json({
+    //         description: `Visualizzazione dettagli del post ${id}`,
+    //         posts,
+    //         post,
+    //         prevPost,
+    //         nextPost,
+    //     });
+
+
+    console.log(`show: ${req.params.id}`);
+    const postId = parseInt(req.params.id);
+
+    const sql = `
+        SELECT 
+            * 
+        FROM \`posts\` 
+        WHERE id = ?
+    `;
+
+    connection.query(sql, [postId], (err, results) => {
+        if (err) throw err;
+
+
+        console.log("post", results[0]);
+        const post = results[0];
+
+        // # TEMPORANEO
+        // todo: CAPIRE MODO MIGLIORE PER SISTEMARE
+        // back-express\public\imgs\posts
+        post.image = `/imgs/posts/${post.image.replace('avif', 'jpeg')}`;
+
+
+        const tagsSql = `
+            SELECT
+                *
+            FROM \`tags\`
+
+            INNER JOIN \`post_tag\`
+            ON \`tags\`.\`id\` = \`post_tag\`.\`tag_id\`
+            
+            WHERE \`post_tag\`.\`post_id\` = ?
+        `
+        connection.query(tagsSql, [postId], (err, results) => {
+            if (err) throw err;
+
+            console.log("tags", results);
+
+            post.tags = results;
+
+            res
+                .json({
+                    description: `Visualizzazione dettagli del post ${postId}`,
+                    // posts: [],
+                    post,
+                    // todo: REINSERIRE SISTEMA PER NAVIGAZIONE A PRECEDENTE O SUCCESSIVO
+                    // prevPost: null,
+                    // nextPost: null,
+                });
         });
+    });
+
 
 
 
@@ -301,7 +355,7 @@ const destroy = (req, res) => {
     console.log(`destroy: ${req.params.id}`)
 
 
-
+    // todo: TENGO QUESTI COMMENTI COME ESEMPIO PER QUANDO SVOLGERO LA TODO SOTTO RELATIVAMENTE ALLA SELECT DOPO LA DELETE
     // const id = parseInt(req.params.id);
     // const post = posts.find(post => post.id === id);
     // // console.log('destroy', post)
@@ -337,59 +391,23 @@ const destroy = (req, res) => {
     connection.query(sql, [postId], (err, results) => {
         if (err) throw err;
 
-
-        // * DEBUG
-        // console.log("results", results);
-        // res
-        //     // * STATUS "OK (SENZA CONTENUTO)" perchè non ho contenuto da mostrare indietro
-        //     .status(204)
-        //     .send();
-        // .json({
-        //     description: "Cancellazione del post riuscita",
-        //     posts: results
-            
-
-
-
-        //     // * DEBUG
-        //     // posts: [],
-        //     // post: results[0]
-        // });
-
-
         const postsAfterDeleteSql = "SELECT * FROM POSTS";
         connection.query(postsAfterDeleteSql, (err, results) => {
             if (err) throw err;
 
             res
+                // todo: SOLITAMENTE SI RISPONDE CON 204, IO AVEVO LASCIATO ORIGINARIAMENTE JSON PER AVERE LOG (prima di avere frontend) E HO QUINDI FATTO FRONTEND SECONDO QUESTA LOGICA
+                // todo: MODIFICARE QUINDI FRONTEND PER GESTIRE CAMBIAMENTO DELL'ARRAY DEI POSTS INVECE DI ESEGUIRE NEL BACKEND LA SELECT DAL DB PER I POST DOPO LA CANCELLAZIONE, ASSEGNANDOLA E BASTA NEL FRONTEND
                 // // * STATUS "OK (SENZA CONTENUTO)" perchè non ho contenuto da mostrare indietro
                 // .status(204)
                 // .send();
                 .json({
                     description: "Cancellazione del post riuscita",
                     posts: results
-                    
-    
-    
-    
-                    // * DEBUG
-                    // posts: [],
-                    // post: results[0]
                 });
         });
 
     })
-    
-
-    // res
-    //     // // * STATUS "OK (SENZA CONTENUTO)" perchè non ho contenuto da mostrare indietro
-    //     // .status(204)
-    //     // .send();
-    //     .json({
-    //         description: "Cancellazione del post " + id + " riuscita",
-    //         // posts
-    //         posts: []
-    //     });
 };
 
 

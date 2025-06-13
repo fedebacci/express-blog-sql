@@ -19,7 +19,7 @@ export default function ShowPostPage () {
     const { id } = useParams();
     
     const [post, setPost] = useState({});
-    const [currentPostId, setCurrentPostId] = useState(id);
+    // const [currentPostId, setCurrentPostId] = useState(id);
 
     const navigate = useNavigate();
 
@@ -29,8 +29,12 @@ export default function ShowPostPage () {
         axios
             .get(apiUrl + '/' + postId)
             .then(response => {
-                prevPostId = response.data.prevPost;
-                nextPostId = response.data.nextPost;
+                // prevPostId = response.data.prevPost;
+                // nextPostId = response.data.nextPost;
+
+                // console.debug("fetchPost", response.data);
+                console.debug("fetchPost", response.data.post);
+                
                 setPost(response.data.post);
                 navigate(pages.SHOWPOST(postId));
             })
@@ -46,9 +50,11 @@ export default function ShowPostPage () {
         fetchPost(id);
     }, [])
 
-    useEffect(() => {
-        fetchPost(currentPostId);
-    }, [currentPostId])
+
+    // todo: REINSERIRE SISTEMA PER NAVIGAZIONE A PRECEDENTE O SUCCESSIVO
+    // useEffect(() => {
+    //     fetchPost(currentPostId);
+    // }, [currentPostId])
 
 
     
@@ -66,8 +72,8 @@ export default function ShowPostPage () {
 
                         <br />
 
-
-                        {
+                        {/* // todo: REINSERIRE SISTEMA PER NAVIGAZIONE A PRECEDENTE O SUCCESSIVO */}
+                        {/* {
                             <button 
                                 disabled={prevPostId == undefined} 
                                 onClick={() => setCurrentPostId(prevPostId)} 
@@ -84,7 +90,7 @@ export default function ShowPostPage () {
                             >
                                 Post successivo
                             </button>
-                        }
+                        } */}
 
 
 
@@ -112,11 +118,11 @@ export default function ShowPostPage () {
                                 </div>
                                 <p>
                                     {
-                                        post.tags.length > 0 ?
-                                        post.tags.map((tag, index) => {
+                                        post.tags.length > 0 && post.tags !== null ?
+                                        post.tags.map(tag => {
                                             return (
-                                                <span key={index} className="badge text-bg-primary me-1">
-                                                    {tag}
+                                                <span key={tag.id} className="badge text-bg-primary me-1">
+                                                    {tag.label}
                                                 </span>
                                             )
                                         })

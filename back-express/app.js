@@ -44,7 +44,7 @@ const cors = require('cors');
 
 // - .static('foldername = public') => Gestione files statici
 // * UTILIZZO MIDDLEWARE STATIC PER METTERE A DISPOSIZIONE LE IMMAGINI DEI POST
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 // - .json()
 // * UTILIZZO MIDDLEWARE JSON PER BODY-PARSING (INTERPRETAZIONE BODY DELLE RICHIESTE DEL CLIENT)
@@ -54,8 +54,8 @@ app.use(express.json());
 // - cors
 const corsConfig = {
     origin: FRONTEND_APP_URL
-}
-app.use(cors(corsConfig))
+};
+app.use(cors(corsConfig));
 
 
 
