@@ -120,8 +120,8 @@ const show = (req, res) => {
     //     });
 
 
-    console.log(`show: ${req.params.id}`);
     const postId = parseInt(req.params.id);
+    // console.log(`show: ${req.params.id}`);
 
     const sql = `
         SELECT 
@@ -132,7 +132,9 @@ const show = (req, res) => {
 
     connection.query(sql, [postId], (err, results) => {
         if (err) throw err;
-
+        if (results.length === 0) {
+            return res.status(404).json({ error: `Post: ${postId} not found`});
+        } 
 
         // console.log("post", results[0]);
         const post = results[0];
@@ -160,7 +162,6 @@ const show = (req, res) => {
         `
         connection.query(tagsSql, [postId], (err, results) => {
             if (err) throw err;
-
             // console.log("tags", results);
 
             post.tags = results;

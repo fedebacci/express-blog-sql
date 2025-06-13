@@ -19,7 +19,8 @@ export default function ShowPostPage () {
     const { id } = useParams();
     
     const [post, setPost] = useState({});
-    const [currentPostId, setCurrentPostId] = useState(id);
+    // todo: REINSERIRE SISTEMA PER NAVIGAZIONE A PRECEDENTE O SUCCESSIVO
+    // const [currentPostId, setCurrentPostId] = useState(id);
 
     const navigate = useNavigate();
 
@@ -35,7 +36,9 @@ export default function ShowPostPage () {
                 navigate(pages.SHOWPOST(postId));
             })
             .catch(error => {
-                console.error(error);
+                // console.error("error", error);
+                // console.error("error.response.data", error.response.data);
+                // console.error("error.response.data.error", error.response.data.error);
 
                 navigate('/not-found');
             })

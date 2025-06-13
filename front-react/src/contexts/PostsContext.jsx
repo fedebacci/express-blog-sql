@@ -10,7 +10,8 @@ import { useAlert } from "./AlertContext";
 const PostsContext = createContext();
 
 
-const apiUrl = 'http://localhost:3000/posts';
+// const apiUrl = 'http://localhost:3000/posts';
+const apiUrl = import.meta.env.VITE_API_URL + '/posts';
 const newPostInitialData = {
     title: "",
     image: "",
