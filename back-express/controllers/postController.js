@@ -20,8 +20,10 @@ const connection = require("../data/db")
 
 
 const index = (req, res) => {
-    console.log('index')
     
+
+    // todo: RICREARE GESTIONE DEI FILTRI (E AGGIUNGERE POSSIBILITA FILTRAGGIO SU FRONTEND)
+    // * GESTIONE VECCHIA DEI FILTRI DA IMPLEMENTARE
     // let { title, content, tags, filterAll } = req.query
     // if (tags) tags = tags.split(', ');
     // filterAll = filterAll === "false" ? false : true;
@@ -69,17 +71,20 @@ const index = (req, res) => {
 
 
 
+    const sql = "SELECT * FROM `posts`";
 
+    connection.query(sql, (err, results) => {
+        // if (err) throw new Error("Errore nella richiesta a DB index");
+        if (err) throw error;
 
-
-
-
-    // # TMP PER NON ANDARE IN ERRORE DURANTE SPOSTAMENTO RICEZIONE DATI
-    res
-        .json({   
-            description: "Lista dei post",
-            posts: []
-        });
+        res
+            .json({
+                status: 200,
+                description: "Lista dei post DA DB",
+                posts: results
+            });
+        
+    })
 };
 
 
@@ -293,33 +298,98 @@ const modify = (req, res) => {
 
 
 const destroy = (req, res) => {
-    const id = parseInt(req.params.id);
-    const post = posts.find(post => post.id === id);
-    // console.log('delete', post)
+    console.log(`destroy: ${req.params.id}`)
 
 
 
-    if (!post) {
-        const error = new Error(`Cancellazione del post ${id} fallita: Post non trovato`);
-        error.statusCode = 404;
-        throw error;
-    };
+    // const id = parseInt(req.params.id);
+    // const post = posts.find(post => post.id === id);
+    // // console.log('destroy', post)
+
+    // if (!post) {
+    //     const error = new Error(`Cancellazione del post ${id} fallita: Post non trovato`);
+    //     error.statusCode = 404;
+    //     throw error;
+    // };
+
+    // // posts = posts.filter(post => post.id !== id);
+    // // * MIGLIORE IN TERMINI COMPUTAZIONALI
+    // posts.splice(posts.indexOf(post), 1);
+    // // console.log("posts DOPO LA RIMOZIONE:", posts);
+
+    // res
+    //     // // * STATUS "OK (SENZA CONTENUTO)" perchè non ho contenuto da mostrare indietro
+    //     // .status(204)
+    //     // .send();
+    //     .json({
+    //         description: "Cancellazione del post " + id + " riuscita",
+    //         posts
+    //     });
 
 
 
-    // posts = posts.filter(post => post.id !== id);
-    // * MIGLIORE IN TERMINI COMPUTAZIONALI
-    posts.splice(posts.indexOf(post), 1);
-    // console.log("posts DOPO LA RIMOZIONE:", posts);
+    const postId = req.params.id;
 
-    res
-        // // * STATUS "OK (SENZA CONTENUTO)" perchè non ho contenuto da mostrare indietro
-        // .status(204)
-        // .send();
-        .json({
-            description: "Cancellazione del post " + id + " riuscita",
-            posts
+    // * DEBUG
+    // const sql = "SELECT * FROM `posts` WHERE id = ?";
+    const sql = "DELETE FROM `posts` WHERE id = ?";
+
+    connection.query(sql, [postId], (err, results) => {
+        if (err) throw err;
+
+
+        // * DEBUG
+        // console.log("results", results);
+        // res
+        //     // * STATUS "OK (SENZA CONTENUTO)" perchè non ho contenuto da mostrare indietro
+        //     .status(204)
+        //     .send();
+        // .json({
+        //     description: "Cancellazione del post riuscita",
+        //     posts: results
+            
+
+
+
+        //     // * DEBUG
+        //     // posts: [],
+        //     // post: results[0]
+        // });
+
+
+        const postsAfterDeleteSql = "SELECT * FROM POSTS";
+        connection.query(postsAfterDeleteSql, (err, results) => {
+            if (err) throw err;
+
+            res
+                // // * STATUS "OK (SENZA CONTENUTO)" perchè non ho contenuto da mostrare indietro
+                // .status(204)
+                // .send();
+                .json({
+                    description: "Cancellazione del post riuscita",
+                    posts: results
+                    
+    
+    
+    
+                    // * DEBUG
+                    // posts: [],
+                    // post: results[0]
+                });
         });
+
+    })
+    
+
+    // res
+    //     // // * STATUS "OK (SENZA CONTENUTO)" perchè non ho contenuto da mostrare indietro
+    //     // .status(204)
+    //     // .send();
+    //     .json({
+    //         description: "Cancellazione del post " + id + " riuscita",
+    //         // posts
+    //         posts: []
+    //     });
 };
 
 
