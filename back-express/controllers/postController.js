@@ -17,6 +17,8 @@ const connection = require("../data/db")
 
 
 
+const { APP_HOST, APP_PORT } = process.env;
+
 
 
 const index = (req, res) => {
@@ -132,13 +134,18 @@ const show = (req, res) => {
         if (err) throw err;
 
 
-        console.log("post", results[0]);
+        // console.log("post", results[0]);
         const post = results[0];
 
         // # TEMPORANEO
         // todo: CAPIRE MODO MIGLIORE PER SISTEMARE
-        // back-express\public\imgs\posts
-        post.image = `/imgs/posts/${post.image.replace('avif', 'jpeg')}`;
+        // ? USARE express-blog-api-crod E react-context-api COME BACK E FRONT PER TESTARE IMMAGINI FUNZIONANTI
+        // http://localhost:3000/imgs/posts/ciambellone.jpeg
+        // post.image = `/imgs/posts/${post.image.replace('avif', 'jpeg')}`;
+        
+        // post.image = `http://localhost:3000/imgs/posts/${post.image.replace('avif', 'jpeg')}`;
+        post.image = `${APP_HOST}:${APP_PORT}/imgs/posts/${post.image.replace('avif', 'jpeg')}`;
+        console.log("", post.image);
 
 
         const tagsSql = `
@@ -154,7 +161,7 @@ const show = (req, res) => {
         connection.query(tagsSql, [postId], (err, results) => {
             if (err) throw err;
 
-            console.log("tags", results);
+            // console.log("tags", results);
 
             post.tags = results;
 
